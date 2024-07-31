@@ -41,7 +41,7 @@ def extractFeatures(text):
     """
     features = {}
     features['invoice_number'] = re.search(r'Invoice Number:\s*(\S+)', text)
-    features['date'] = re.search(r'Datum:\s*(\d{2}-\d{2}-\d{4})', text)
+    features['date'] = re.search(r'Date:\s*(\d{4}-\d{2}-\d{2})', text)
     features['amount'] = re.search(r'Amount:\s*\$([\d,\.]+)', text)
     return features
 
@@ -118,7 +118,7 @@ if __name__ == "__main__":
             print(f"Error processing {pdfFile}: {str(e)}")  # Handle and report errors
 
     # Choose one file as the input invoice (for example)
-    inputFile = 'train\invoice_77073.pdf'
+    inputFile = 'test/invoice_102857.pdf'
     inputInvoiceText = extractText(inputFile)  # Extract text from the input invoice
     inputInvoice = {'text': inputInvoiceText, 'filename': inputFile}  # Create an invoice dictionary
 
@@ -129,3 +129,12 @@ if __name__ == "__main__":
         print(f"Similarity score: {similarityScore}")
     else:
         print("No similar invoice found.")
+
+    # Extract features from the input invoice
+    input_features = extractFeatures(inputInvoiceText)
+    print("\nInput Invoice Features:")
+    for key, value in input_features.items():
+        if value:
+            print(f"{key}: {value.group(1)}")  # Print the extracted feature if found
+        else:
+            print(f"{key}: Not found")  # Print 'Not found' if the feature was not extracted
